@@ -1,0 +1,17 @@
+
+I have committed a file with all site URLs at [path to urls.txt]. 
+
+Please perform a comprehensive site scope analysis:
+
+1. Group all URLs by path patterns to identify distinct page template types
+2. Show the distribution — how many pages fall into each pattern group
+3. From each distinct pattern group, sample and analyze 2-3 representative pages
+4. For each analyzed page, identify: sections, blocks used, block variants, and content patterns
+5. Produce a final scoping report with:
+   - Total number of distinct page templates identified
+   - Complete block inventory (all unique blocks across the site)
+   - All block variants with their purpose and which page types use them
+   - Page template → block mapping (which blocks appear on which template types)
+
+The goal is to identify the full development scope — every template, every block, every variant that exists on this site
+Note: Some URLs may return 404 (pages removed or unavailable). Skip any URL that returns 404 and move to the next sample from that group. Do not retry or report 404 pages — just pick an alternate URL from the same pattern group.
