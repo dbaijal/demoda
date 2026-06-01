@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermo Fisher US/EN - Site Scope Analysis Report</title>
+    <style>
+        :root {
+            --brand-red: #e71316;
+            --brand-dark: #1a1a2e;
+            --brand-blue: #0071d0;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --text-primary: #222222;
+            --text-secondary: #555759;
+            --border-light: #e5e7eb;
+            --tier1: #dc2626;
+            --tier2: #f59e0b;
+            --tier3: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--bg-light);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--brand-dark) 0%, #16213e 100%);
+            color: white;
+            padding: 48px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(231, 19, 22, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+
+        .meta-bar {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .meta-item .label {
+            opacity: 0.7;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-item .value {
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: -40px 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--brand-red);
+            line-height: 1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        section {
+            margin-bottom: 48px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--brand-red);
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 24px 0 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        thead th {
+            background: var(--brand-dark);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: #f0f7ff;
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            vertical-align: top;
+        }
+
+        tbody tr:last-child td:first-child {
+            border-radius: 0 0 0 8px;
+        }
+
+        tbody tr:last-child td:last-child {
+            border-radius: 0 0 8px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-tier1 { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .badge-tier2 { background: #fffbeb; color: #92400e; border: 1px solid #fed7aa; }
+        .badge-tier3 { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+
+        .code {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #7c3aed;
+        }
+
+        .tier-section {
+            border-left: 4px solid;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tier-section.tier1 { border-color: var(--tier1); background: #fef2f2; }
+        .tier-section.tier2 { border-color: var(--tier2); background: #fffbeb; }
+        .tier-section.tier3 { border-color: var(--tier3); background: #ecfdf5; }
+
+        .tier-section h4 {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .tier-section ul {
+            margin-left: 20px;
+            list-style-type: none;
+        }
+
+        .tier-section ul li {
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .tier-section ul li::before {
+            content: '\2022';
+            position: absolute;
+            left: -16px;
+            font-weight: bold;
+        }
+
+        .tier-section.tier1 ul li::before { color: var(--tier1); }
+        .tier-section.tier2 ul li::before { color: var(--tier2); }
+        .tier-section.tier3 ul li::before { color: var(--tier3); }
+
+        .page-count {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .chart-bar {
+            height: 24px;
+            background: linear-gradient(90deg, var(--brand-red) 0%, #ff6b6b 100%);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            min-width: 4px;
+        }
+
+        .chart-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 80px;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .chart-label {
+            font-size: 0.85rem;
+            text-align: right;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chart-value {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .note-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .note-box p {
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+
+        .block-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .block-card {
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 16px;
+            transition: box-shadow 0.2s;
+        }
+
+        .block-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .block-card .block-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--brand-dark);
+            margin-bottom: 4px;
+        }
+
+        .block-card .block-purpose {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .block-card .block-variants {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .variant-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            background: #f1f5f9;
+            border-radius: 3px;
+            color: #475569;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .mapping-table td {
+            font-size: 0.8rem;
+        }
+
+        .mapping-table .check {
+            color: var(--brand-red);
+            font-weight: 700;
+        }
+
+        .footer {
+            background: var(--brand-dark);
+            color: white;
+            padding: 32px 0;
+            margin-top: 64px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .toc {
+            background: white;
+            border-radius: 12px;
+            padding: 24px 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 40px;
+            margin-left: 20px;
+        }
+
+        .toc li {
+            padding: 4px 0;
+            font-size: 0.9rem;
+        }
+
+        .toc a {
+            color: var(--brand-blue);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .meta-bar { gap: 16px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .chart-row { grid-template-columns: 120px 1fr 60px; }
+            .toc ol { columns: 1; }
+            .block-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .header { padding: 24px 0; }
+            .section-card { box-shadow: none; border: 1px solid #eee; }
+            .stats-grid { margin-top: 24px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <h1>Site Scope Analysis Report</h1>
+        <p class="subtitle">Thermo Fisher Scientific - US/EN Migration Assessment</p>
+        <div class="meta-bar">
+            <div class="meta-item">
+                <span class="label">Site</span>
+                <span class="value">thermofisher.com/us/en</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Total URLs</span>
+                <span class="value">39,543</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Source CMS</span>
+                <span class="value">AEM Sites (Classic/Touch UI)</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Date</span>
+                <span class="value">June 1, 2026</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">39,543</div>
+            <div class="stat-label">Total Pages</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">34</div>
+            <div class="stat-label">Template Types</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">15</div>
+            <div class="stat-label">Dev Templates</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">36</div>
+            <div class="stat-label">Unique Blocks</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">45+</div>
+            <div class="stat-label">Block Variants</div>
+        </div>
+    </div>
+
+    <div class="toc">
+        <h3>Contents</h3>
+        <ol>
+            <li><a href="#distribution">Page Template Distribution</a></li>
+            <li><a href="#consolidated">Consolidated Development Templates</a></li>
+            <li><a href="#blocks">Complete Block Inventory</a></li>
+            <li><a href="#variants">Block Variant Details</a></li>
+            <li><a href="#mapping">Template-to-Block Mapping</a></li>
+            <li><a href="#scope">Development Scope Summary</a></li>
+            <li><a href="#approach">Recommended Migration Approach</a></li>
+        </ol>
+    </div>
+
+    <!-- Section 1: Distribution -->
+    <section id="distribution">
+        <div class="section-card">
+            <h2>1. Page Template Distribution</h2>
+            <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 0.9rem;">
+                Top 15 template types by page volume (representing 95% of the site):
+            </p>
+
+            <div style="margin-bottom: 32px;">
+                <div class="chart-row">
+                    <span class="chart-label">Life Science Products</span>
+                    <div class="chart-bar" style="width: 100%;"></div>
+                    <span class="chart-value">7,558</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Form Pages</span>
+                    <div class="chart-bar" style="width: 96%;"></div>
+                    <span class="chart-value">7,247</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Confirmation Pages</span>
+                    <div class="chart-bar" style="width: 65%;"></div>
+                    <span class="chart-value">4,896</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Industrial Products</span>
+                    <div class="chart-bar" style="width: 37%;"></div>
+                    <span class="chart-value">2,803</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Learning Center</span>
+                    <div class="chart-bar" style="width: 30%;"></div>
+                    <span class="chart-value">2,287</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Promo Landing</span>
+                    <div class="chart-bar" style="width: 26%;"></div>
+                    <span class="chart-value">1,932</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Virtual Tours</span>
+                    <div class="chart-bar" style="width: 18%;"></div>
+                    <span class="chart-value">1,329</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Event Pages</span>
+                    <div class="chart-bar" style="width: 17%;"></div>
+                    <span class="chart-value">1,322</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Clinical Products</span>
+                    <div class="chart-bar" style="width: 15%;"></div>
+                    <span class="chart-value">1,129</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Promo Cart Modals</span>
+                    <div class="chart-bar" style="width: 13%;"></div>
+                    <span class="chart-value">1,016</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Protocols</span>
+                    <div class="chart-bar" style="width: 10%;"></div>
+                    <span class="chart-value">735</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Promo Modals</span>
+                    <div class="chart-bar" style="width: 10%;"></div>
+                    <span class="chart-value">723</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Cell Line Database</span>
+                    <div class="chart-bar" style="width: 8%;"></div>
+                    <span class="chart-value">621</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Tech Ref Library</span>
+                    <div class="chart-bar" style="width: 8%;"></div>
+                    <span class="chart-value">580</span>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-label">Brand Pages</span>
+                    <div class="chart-bar" style="width: 7%;"></div>
+                    <span class="chart-value">526</span>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Template Type</th>
+                        <th>Pages</th>
+                        <th>% of Site</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Life Science Product Pages</td><td>7,558</td><td>19.1%</td><td><span class="badge badge-tier1">Tier 1</span></td></tr>
+                    <tr><td>2</td><td>Form Pages (lead gen/gated content)</td><td>7,247</td><td>18.3%</td><td><span class="badge badge-tier1">Tier 1</span></td></tr>
+                    <tr><td>3</td><td>Confirmation/Thank-You Pages</td><td>4,896</td><td>12.4%</td><td><span class="badge badge-tier1">Tier 1</span></td></tr>
+                    <tr><td>4</td><td>Industrial Product Pages</td><td>2,803</td><td>7.1%</td><td><span class="badge badge-tier1">Tier 1</span></td></tr>
+                    <tr><td>5</td><td>Learning Center Articles</td><td>2,287</td><td>5.8%</td><td><span class="badge badge-tier1">Tier 1</span></td></tr>
+                    <tr><td>6</td><td>Promotional Landing Pages</td><td>1,932</td><td>4.9%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>7</td><td>Virtual Tours / 3D Product Demos</td><td>1,329</td><td>3.4%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>8</td><td>Event Pages</td><td>1,322</td><td>3.3%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>9</td><td>Clinical Product Pages</td><td>1,129</td><td>2.9%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>10</td><td>Promo Cart Modals</td><td>1,016</td><td>2.6%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>11</td><td>Protocol/Method Pages</td><td>735</td><td>1.9%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>12</td><td>Promo Modals</td><td>723</td><td>1.8%</td><td><span class="badge badge-tier2">Tier 2</span></td></tr>
+                    <tr><td>13</td><td>Cell Line Database Entries</td><td>621</td><td>1.6%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>14</td><td>Technical Reference Library</td><td>580</td><td>1.5%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>15</td><td>Electron Microscopy Pages</td><td>516</td><td>1.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>16</td><td>Brand Pages</td><td>526</td><td>1.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>17</td><td>Tech Support Articles</td><td>402</td><td>1.0%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>18</td><td>Blog Posts</td><td>304</td><td>0.8%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>19</td><td>Handbook Chapters</td><td>292</td><td>0.7%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>20</td><td>Newsletter/Journal Articles</td><td>268</td><td>0.7%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>21</td><td>Bioprocessing Pages</td><td>241</td><td>0.6%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>22</td><td>Services Pages</td><td>228</td><td>0.6%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>23</td><td>Press Releases</td><td>228</td><td>0.6%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>24</td><td>About Us / Corporate Pages</td><td>173</td><td>0.4%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>25</td><td>New Ideas/Innovation</td><td>138</td><td>0.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>26</td><td>News Gallery</td><td>135</td><td>0.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>27</td><td>Software Download Pages</td><td>116</td><td>0.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>28</td><td>Materials Science Pages</td><td>105</td><td>0.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>29</td><td>Chemicals Pages</td><td>87</td><td>0.2%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>30</td><td>Digital Solutions</td><td>63</td><td>0.2%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>31</td><td>B2B Pages</td><td>48</td><td>0.1%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>32</td><td>Semiconductor Pages</td><td>47</td><td>0.1%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>33</td><td>CSR Pages</td><td>31</td><td>0.1%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                    <tr><td>34</td><td>Other/Misc</td><td>~500</td><td>1.3%</td><td><span class="badge badge-tier3">Tier 3</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 2: Consolidated Templates -->
+    <section id="consolidated">
+        <div class="section-card">
+            <h2>2. Consolidated Development Templates</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary); font-size: 0.9rem;">
+                34 template types consolidate into <strong>15 development templates</strong> based on shared structural patterns:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Template Group</th>
+                        <th>Constituent Types</th>
+                        <th>Pages</th>
+                        <th>Key Pattern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Product Category/Landing</strong></td><td>Life Science, Industrial, Clinical, EM, Materials Science, Bioprocessing, Chemicals, Semiconductor</td><td>12,466</td><td>Hero + sections + card grid</td></tr>
+                    <tr><td><strong>Form/Lead-Gen</strong></td><td>Form Pages + Thank-You/Confirmation</td><td>12,143</td><td>Hero + form container + sidebar</td></tr>
+                    <tr><td><strong>Learning Center / Article</strong></td><td>Learning Center, Protocol, Handbook, Newsletter, Tech Support</td><td>3,984</td><td>Long-form content + sidebar nav</td></tr>
+                    <tr><td><strong>Promotional Landing</strong></td><td>Promo Landing + Modal + Cart Modal</td><td>3,671</td><td>Campaign hero + product cards</td></tr>
+                    <tr><td><strong>Virtual Tour / 3D</strong></td><td>Virtual Tours</td><td>1,329</td><td>3D viewer + hotspots + info</td></tr>
+                    <tr><td><strong>Event</strong></td><td>Event Pages</td><td>1,322</td><td>Hero + agenda + speakers + reg</td></tr>
+                    <tr><td><strong>Cell Line Database</strong></td><td>Cell Line DB entries</td><td>621</td><td>Structured data + tables</td></tr>
+                    <tr><td><strong>Technical Reference Library</strong></td><td>Tech Ref Library</td><td>580</td><td>Support docs + nav tree</td></tr>
+                    <tr><td><strong>Brand</strong></td><td>Brand Pages</td><td>526</td><td>Brand hero + product showcase</td></tr>
+                    <tr><td><strong>Blog</strong></td><td>Blog Posts</td><td>304</td><td>Article + social + related</td></tr>
+                    <tr><td><strong>Press / News</strong></td><td>Press Releases + News Gallery</td><td>363</td><td>Article + date + media</td></tr>
+                    <tr><td><strong>Services</strong></td><td>Services Pages</td><td>228</td><td>Service description + CTAs</td></tr>
+                    <tr><td><strong>About / Corporate</strong></td><td>About Us + CSR</td><td>204</td><td>Custom blocks (CEO, leadership)</td></tr>
+                    <tr><td><strong>Software Download</strong></td><td>Software Downloads</td><td>116</td><td>Download cards + requirements</td></tr>
+                    <tr><td><strong>B2B / Digital Solutions</strong></td><td>B2B, Digital Solutions, New Ideas</td><td>249</td><td>Specialized landing pages</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 3: Block Inventory -->
+    <section id="blocks">
+        <div class="section-card">
+            <h2>3. Complete Block/Component Inventory</h2>
+
+            <h3>3.1 Core AEM Components</h3>
+            <div class="block-grid">
+                <div class="block-card">
+                    <div class="block-name">pageheadinghero</div>
+                    <div class="block-purpose">Full-width hero banner with heading, description, CTAs, and background image</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--dark</span>
+                        <span class="variant-tag">m--small-hero</span>
+                        <span class="variant-tag">--hasForegroundImage</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">textimage</div>
+                    <div class="block-purpose">Most versatile block - flexible text + image component with 7 layout variants</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--teaser</span>
+                        <span class="variant-tag">m--teaser-no-border</span>
+                        <span class="variant-tag">m--teaser-full</span>
+                        <span class="variant-tag">m--one-third-img</span>
+                        <span class="variant-tag">m--title-over-img</span>
+                        <span class="variant-tag">m--text-overlay-dark</span>
+                        <span class="variant-tag">m--learning-center</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">ctaitem</div>
+                    <div class="block-purpose">Call-to-action button/link with extensive style variants</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--btn-primary</span>
+                        <span class="variant-tag">m--btn-secondary</span>
+                        <span class="variant-tag">m--btn-outline</span>
+                        <span class="variant-tag">m--btn-white</span>
+                        <span class="variant-tag">m--btn-link</span>
+                        <span class="variant-tag">m--btn-info</span>
+                        <span class="variant-tag">m--video</span>
+                        <span class="variant-tag">m--resource</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">container</div>
+                    <div class="block-purpose">Layout container for responsive grid columns (12-col system)</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--match-height</span>
+                        <span class="variant-tag">m--no-gutters</span>
+                        <span class="variant-tag">m--border</span>
+                        <span class="variant-tag">container-fluid</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">text</div>
+                    <div class="block-purpose">Rich text content block for paragraphs, lists, and inline formatting</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--condensed</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">sectioncontainer</div>
+                    <div class="block-purpose">Page section wrapper with indentation and spacing</div>
+                    <div class="block-variants">
+                        <span class="variant-tag">m--indent-l1</span>
+                    </div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">videoplayer</div>
+                    <div class="block-purpose">Embedded video player (YouTube, Brightcove, etc.)</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">anchorlist</div>
+                    <div class="block-purpose">In-page sticky anchor navigation for long pages</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">manualnav</div>
+                    <div class="block-purpose">Manual sub-navigation sidebar component</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">autonavigation</div>
+                    <div class="block-purpose">Auto-generated child page navigation tree</div>
+                    <div class="block-variants"><span class="variant-tag">child</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">experiencefragment</div>
+                    <div class="block-purpose">Reusable shared content (header, footer, banners)</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">testimonial</div>
+                    <div class="block-purpose">Customer quote/testimonial with attribution</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">breadcrumb</div>
+                    <div class="block-purpose">Navigation breadcrumb trail</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">sectiontitle</div>
+                    <div class="block-purpose">Section heading with anchor ID for navigation</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">textoverlay</div>
+                    <div class="block-purpose">Text overlay positioned on image backgrounds</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">separator</div>
+                    <div class="block-purpose">Visual horizontal rule divider</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">title</div>
+                    <div class="block-purpose">Section/page title component</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+                <div class="block-card">
+                    <div class="block-name">image</div>
+                    <div class="block-purpose">Standalone responsive image</div>
+                    <div class="block-variants"><span class="variant-tag">standard</span></div>
+                </div>
+            </div>
+
+            <h3>3.2 Form Components</h3>
+            <table>
+                <thead>
+                    <tr><th>Component</th><th>Purpose</th><th>Variants</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>form-container</strong></td><td>Wraps entire form with responsive grid layout</td><td><span class="code">grid-based</span></td></tr>
+                    <tr><td><strong>form-input</strong></td><td>Text, email, telephone input fields</td><td><span class="code">m--hideonload</span> (conditional)</td></tr>
+                    <tr><td><strong>form-options</strong></td><td>Dropdowns, checkboxes, radio buttons</td><td><span class="code">--drop-down</span> <span class="code">--checkbox</span> <span class="code">--radio</span></td></tr>
+                    <tr><td><strong>form-textarea</strong></td><td>Multi-line text input</td><td>standard</td></tr>
+                    <tr><td><strong>form-hidden</strong></td><td>Hidden tracking/UTM fields</td><td>standard</td></tr>
+                    <tr><td><strong>form-button</strong></td><td>Submit button</td><td>standard</td></tr>
+                    <tr><td><strong>form-recaptcha</strong></td><td>Google reCAPTCHA verification</td><td>standard</td></tr>
+                    <tr><td><strong>form-xfinclusion</strong></td><td>Modular form fragments (opt-in, tracking)</td><td><span class="code">MSD-Opt-in</span> <span class="code">msd-mql</span> <span class="code">msd-standard-form</span></td></tr>
+                </tbody>
+            </table>
+
+            <h3>3.3 Specialized/Custom Components</h3>
+            <table>
+                <thead>
+                    <tr><th>Component</th><th>Purpose</th><th>Used On</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>about-hero</strong></td><td>Custom About Us hero with company mission/video</td><td>About Us landing</td></tr>
+                    <tr><td><strong>leadership</strong></td><td>Executive leadership cards/grid</td><td>About Us</td></tr>
+                    <tr><td><strong>our-brands</strong></td><td>Brand logo grid/showcase</td><td>About Us, Brand pages</td></tr>
+                    <tr><td><strong>ourmission</strong></td><td>Mission statement block</td><td>About Us</td></tr>
+                    <tr><td><strong>ceoletter</strong></td><td>CEO letter/message block</td><td>CSR pages</td></tr>
+                    <tr><td><strong>csr-commitment</strong></td><td>CSR commitment pledge statement</td><td>CSR pages</td></tr>
+                    <tr><td><strong>highlights</strong></td><td>Key metrics/stats highlight grid</td><td>CSR pages</td></tr>
+                    <tr><td><strong>herotext</strong></td><td>Text-only hero (no background image)</td><td>CSR pages</td></tr>
+                    <tr><td><strong>endnote</strong></td><td>Page endnotes/footnotes</td><td>CSR pages</td></tr>
+                </tbody>
+            </table>
+
+            <h3>3.4 Dynamic/Storefront Components</h3>
+            <table>
+                <thead>
+                    <tr><th>Component</th><th>Purpose</th><th>Used On</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>kmd-card</strong></td><td>Kameleon Design System product card</td><td>Product category pages</td></tr>
+                    <tr><td><strong>kmd-dm-card</strong></td><td>Data-managed dynamic product card</td><td>Product listings</td></tr>
+                    <tr><td><strong>kmd-dm-fbt</strong></td><td>"Frequently Bought Together" widget</td><td>Product detail pages</td></tr>
+                    <tr><td><strong>pragma-toggle</strong></td><td>Toggle/expand-collapse interaction</td><td>Header, footer, navigation</td></tr>
+                    <tr><td><strong>promos</strong></td><td>Promotional content area</td><td>Product pages</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 4: Variants -->
+    <section id="variants">
+        <div class="section-card">
+            <h2>4. Block Variant Details</h2>
+
+            <h3>4.1 TextImage Variants (Most-Used Block)</h3>
+            <table>
+                <thead>
+                    <tr><th>Variant</th><th>Visual Pattern</th><th>Used On</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="code">m--teaser</span></td><td>Card-style: image top, title + description below</td><td>Product, Event, EM pages</td></tr>
+                    <tr><td><span class="code">m--teaser-no-border</span></td><td>Borderless card variant</td><td>Product category pages</td></tr>
+                    <tr><td><span class="code">m--teaser-full</span></td><td>Full-width teaser card</td><td>Bioprocessing, Product pages</td></tr>
+                    <tr><td><span class="code">m--one-third-img</span></td><td>33% image / 67% text side-by-side</td><td>Product, Flow Cytometry</td></tr>
+                    <tr><td><span class="code">m--title-over-img</span></td><td>Title overlaid on image</td><td>Product, Event, Bioprocessing</td></tr>
+                    <tr><td><span class="code">m--text-overlay-dark</span></td><td>Dark text overlay on image background</td><td>Event, EM product pages</td></tr>
+                    <tr><td><span class="code">m--learning-center</span></td><td>Learning center article card with icon</td><td>Bioprocessing, Learning Center</td></tr>
+                </tbody>
+            </table>
+
+            <h3>4.2 CTA Button Variants</h3>
+            <table>
+                <thead>
+                    <tr><th>Variant</th><th>Visual Style</th><th>Usage Context</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="code">m--btn-primary</span></td><td>Solid red/brand-color button</td><td>Primary actions: Buy, Contact, Register</td></tr>
+                    <tr><td><span class="code">m--btn-secondary</span></td><td>Solid dark gray button</td><td>Secondary actions</td></tr>
+                    <tr><td><span class="code">m--btn-outline</span></td><td>White with gray border</td><td>Tertiary actions</td></tr>
+                    <tr><td><span class="code">m--btn-white</span></td><td>Transparent + white border</td><td>Hero CTAs on dark backgrounds</td></tr>
+                    <tr><td><span class="code">m--btn-link</span></td><td>Text link with arrow icon</td><td>Inline navigation, "Learn more"</td></tr>
+                    <tr><td><span class="code">m--btn-info</span></td><td>Gray/info styled button</td><td>Informational actions</td></tr>
+                    <tr><td><span class="code">m--video</span></td><td>Red circle video play button</td><td>Video content triggers</td></tr>
+                    <tr><td><span class="code">m--resource</span></td><td>Bordered resource card button</td><td>Document downloads</td></tr>
+                </tbody>
+            </table>
+
+            <h3>4.3 Page Hero Variants</h3>
+            <table>
+                <thead>
+                    <tr><th>Variant</th><th>Layout</th><th>Used On</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="code">m--dark</span></td><td>Dark background, light text + CTAs</td><td>Standard across most pages</td></tr>
+                    <tr><td><span class="code">m--dark m--small-hero</span></td><td>Reduced-height dark hero</td><td>Sub-category pages, Bioprocessing</td></tr>
+                    <tr><td><span class="code">about-hero</span></td><td>Custom hero with company video</td><td>About Us landing only</td></tr>
+                    <tr><td><span class="code">herotext</span></td><td>Text-only hero (no image)</td><td>CSR pages</td></tr>
+                    <tr><td><span class="code">--hasForegroundImage</span></td><td>Hero + foreground product image overlay</td><td>Cell Line DB, product detail</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 5: Template-to-Block Mapping -->
+    <section id="mapping">
+        <div class="section-card">
+            <h2>5. Template-to-Block Mapping</h2>
+            <p style="margin-bottom: 16px; color: var(--text-secondary); font-size: 0.9rem;">
+                Which blocks appear on which template types:
+            </p>
+            <div style="overflow-x: auto;">
+            <table class="mapping-table">
+                <thead>
+                    <tr>
+                        <th>Template</th>
+                        <th>Hero</th>
+                        <th>TextImage</th>
+                        <th>CTA</th>
+                        <th>Form</th>
+                        <th>Video</th>
+                        <th>Navigation</th>
+                        <th>Special</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Product Category</strong></td>
+                        <td>dark</td>
+                        <td>teaser, one-third, title-over</td>
+                        <td>primary, link, outline</td>
+                        <td>-</td>
+                        <td class="check">&#10003;</td>
+                        <td>anchorlist, autonav</td>
+                        <td>kmd-card</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Form/Lead-Gen</strong></td>
+                        <td>dark</td>
+                        <td>-</td>
+                        <td>primary (submit)</td>
+                        <td class="check">Full suite</td>
+                        <td class="check">&#10003;</td>
+                        <td>-</td>
+                        <td>form-xfinclusion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Learning Center</strong></td>
+                        <td>dark/small</td>
+                        <td>learning-center, teaser-full</td>
+                        <td>lc-cta, sticky, link</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>manualnav</td>
+                        <td>lc-container-border</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Promo Landing</strong></td>
+                        <td>dark</td>
+                        <td>teaser, title-over</td>
+                        <td>primary, white</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>promos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Event</strong></td>
+                        <td>dark</td>
+                        <td>teaser, text-overlay, title-over</td>
+                        <td>primary, outline, link</td>
+                        <td>inline</td>
+                        <td>-</td>
+                        <td>sectioncontainer</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Virtual Tour</strong></td>
+                        <td>custom 3D</td>
+                        <td>-</td>
+                        <td>primary</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>sectiontitle</td>
+                        <td>3D viewer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cell Line DB</strong></td>
+                        <td>foreground img</td>
+                        <td>-</td>
+                        <td>primary, white</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>breadcrumb</td>
+                        <td>textoverlay</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blog</strong></td>
+                        <td>dark</td>
+                        <td>-</td>
+                        <td>primary</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>breadcrumb</td>
+                        <td>long-form text</td>
+                    </tr>
+                    <tr>
+                        <td><strong>About/Corporate</strong></td>
+                        <td>about-hero</td>
+                        <td>-</td>
+                        <td>primary, link</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>leadership, brands, mission</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CSR</strong></td>
+                        <td>herotext</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>ceoletter, highlights, commitment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Services</strong></td>
+                        <td>dark</td>
+                        <td>teaser</td>
+                        <td>primary</td>
+                        <td>-</td>
+                        <td class="check">&#10003;</td>
+                        <td>manualnav</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Brand</strong></td>
+                        <td>dark</td>
+                        <td>teaser, title-over</td>
+                        <td>primary, link</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>autonav</td>
+                        <td>our-brands</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tech Ref Library</strong></td>
+                        <td>dark/small</td>
+                        <td>-</td>
+                        <td>primary</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>autonav</td>
+                        <td>structured text</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Scope Summary -->
+    <section id="scope">
+        <div class="section-card">
+            <h2>6. Development Scope Summary</h2>
+
+            <div class="tier-section tier1">
+                <h4>Tier 1 - High Volume (covers ~72% of pages)</h4>
+                <ul>
+                    <li><strong>Product Category Landing</strong> template <span class="page-count">(12,466 pages)</span></li>
+                    <li><strong>Form/Lead-Gen</strong> template <span class="page-count">(12,143 pages)</span></li>
+                    <li><strong>Learning Center/Article</strong> template <span class="page-count">(3,984 pages)</span></li>
+                </ul>
+            </div>
+
+            <div class="tier-section tier2">
+                <h4>Tier 2 - Medium Volume (covers ~17% of pages)</h4>
+                <ul>
+                    <li><strong>Promotional Landing</strong> template <span class="page-count">(3,671 pages)</span></li>
+                    <li><strong>Virtual Tour</strong> template <span class="page-count">(1,329 pages)</span></li>
+                    <li><strong>Event</strong> template <span class="page-count">(1,322 pages)</span></li>
+                    <li><strong>Clinical Product</strong> template <span class="page-count">(1,129 pages)</span></li>
+                </ul>
+            </div>
+
+            <div class="tier-section tier3">
+                <h4>Tier 3 - Lower Volume (covers ~11% of pages)</h4>
+                <ul>
+                    <li><strong>Cell Line Database</strong> <span class="page-count">(621 pages)</span></li>
+                    <li><strong>Tech Ref Library</strong> <span class="page-count">(580 pages)</span></li>
+                    <li><strong>Brand Pages</strong> <span class="page-count">(526 pages)</span></li>
+                    <li><strong>Blog</strong> <span class="page-count">(304 pages)</span></li>
+                    <li><strong>Protocol/Handbook</strong> <span class="page-count">(1,027 pages)</span></li>
+                    <li><strong>Press/News</strong> <span class="page-count">(363 pages)</span></li>
+                    <li><strong>About/Corporate/CSR</strong> <span class="page-count">(204 pages)</span></li>
+                    <li><strong>Services, Software, B2B</strong> <span class="page-count">(593 pages)</span></li>
+                </ul>
+            </div>
+
+            <h3>Key Architectural Notes</h3>
+            <div class="note-box">
+                <p><strong>1. AEM Responsive Grid</strong> - All pages use AEM's 12-column responsive grid (<span class="code">aem-Grid--default--12</span>, tablet, phone breakpoints)</p>
+            </div>
+            <div class="note-box">
+                <p><strong>2. Kameleon Design System (kmd-)</strong> - Product catalog cards use a dynamic design system for real-time product data display</p>
+            </div>
+            <div class="note-box">
+                <p><strong>3. Experience Fragments</strong> - Shared content (header, footer, promotional banners) leverages AEM Experience Fragments for reuse</p>
+            </div>
+            <div class="note-box">
+                <p><strong>4. Anchor Navigation</strong> - Product/category pages use <span class="code">data-anchor-nav</span> for in-page sticky navigation</p>
+            </div>
+            <div class="note-box">
+                <p><strong>5. Spacing System</strong> - Consistent utility classes: <span class="code">mt-l1</span> to <span class="code">mt-l5</span>, <span class="code">p-l1</span> to <span class="code">p-l5</span> (16px increments)</p>
+            </div>
+            <div class="note-box">
+                <p><strong>6. Virtual Tour Pages</strong> - Unique 3D viewer technology requiring special embed/integration handling</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Migration Approach -->
+    <section id="approach">
+        <div class="section-card">
+            <h2>7. Recommended Migration Approach</h2>
+            <table>
+                <thead>
+                    <tr><th>Phase</th><th>Action</th><th>Rationale</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Phase 1</strong></td>
+                        <td>Build shared components: hero, textimage (all 7 variants), CTA (all 8 styles), container</td>
+                        <td>These blocks are used across all template types - build once, reuse everywhere</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 2</strong></td>
+                        <td>Product Category Landing + Form/Lead-Gen templates</td>
+                        <td>Covers 72% of pages; highest-traffic, highest-value content</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 3</strong></td>
+                        <td>Learning Center + Promotional Landing templates</td>
+                        <td>Content marketing and campaign pages - high engagement value</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 4</strong></td>
+                        <td>Event + Virtual Tour templates</td>
+                        <td>Medium volume, specialized interactions (3D viewers, registration)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 5</strong></td>
+                        <td>Remaining Tier 3 templates (Blog, Brand, About, CSR, etc.)</td>
+                        <td>Low volume, many custom one-off components; handle last</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Special</strong></td>
+                        <td>Cell Line Database - consider spreadsheet/data-driven approach in EDS</td>
+                        <td>Structured data with 621 near-identical pages; template + data source is more efficient</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<div class="footer">
+    <div class="container">
+        <p>Thermo Fisher Scientific US/EN Site Scope Analysis | Generated June 2026</p>
+        <p style="margin-top: 8px; opacity: 0.7;">AEM Edge Delivery Services Migration Assessment</p>
+    </div>
+</div>
+
+</body>
+</html>
